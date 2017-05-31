@@ -1,11 +1,11 @@
 from random import randint #for randRecursiveWalk
 
-listSkills = {
-  "common lore":["Adeptus Arbites", "Adeptus Astra Telepathica", "Adeptus Mechanicus", "Administratum", "Ecclesiarchy", "Imperial Creed", "Imperial Guard", "Imperial Navy", "Imperium", "Jericho Reach", "Koronus Expanse", "Screaming Vortex", "Tech", "War"],
-  "forbidden lore":["Adeptus Mechanicus", "Adeptus Astartes", "Codex Astartes", "Archeotech", "Daemonology", "Heresy", "The Horus Heresy and Long War", "The Inquisition", "Mutants", "Navigators", "Pirates", "Psykers", "The Warp", "Xenos"],
-  "linguistics":["High Gothic", "Low Gothic"],
-  "scholastic lore":["Astromancy", "Beasts", "Bureaucracy", "Chymistry", "Cryptology", "Heraldry", "Imperial Warrants", "Imperial Creed", "Judgement", "Legend", "Navis Nobilite", "Numerology", "Occulty", "Philosophy", "Tactica Imperialis"],
-  "trade":["Archaeologist", "Armourer", "Astrographer", "Chymist", "Cryptographer", "Explorator", "Linguist", "Remembrancer", "Scrimshawer"],
+listskills = {
+  "common lore":["adeptus arbites", "adeptus astra telepathica", "adeptus mechanicus", "administratum", "ecclesiarchy", "imperial creed", "imperial guard", "imperial navy", "imperium", "jericho reach", "koronus expanse", "screaming vortex", "tech", "war"],
+  "forbidden lore":["adeptus mechanicus", "adeptus astartes", "codex astartes", "archeotech", "daemonology", "heresy", "the horus heresy and long war", "the inquisition", "mutants", "navigators", "pirates", "psykers", "the warp", "xenos"],
+  "linguistics":["high gothic", "low gothic"],
+  "scholastic lore":["astromancy", "beasts", "bureaucracy", "chymistry", "cryptology", "heraldry", "imperial warrants", "imperial creed", "judgement", "legend", "navis nobilite", "numerology", "occulty", "philosophy", "tactica imperialis"],
+  "trade":["archaeologist", "armourer", "astrographer", "chymist", "cryptographer", "explorator", "linguist", "remembrancer", "scrimshawer"],
 }
 
 class node():
@@ -129,6 +129,10 @@ class sheet():
       "unaligned":0,
     }
     self.currentAlignment = "unaligned"
+  def applyChanges(self, changes = [], *args):
+    for change in changes:
+      print("apply change: " + str(change))
+  #actions: setSkills, addListSkills, addTalents, addTraits, addAbilities, addXp, addGear, rollChar
 
 def initializeTest2():
   #human or spacemarine
@@ -136,7 +140,16 @@ def initializeTest2():
 
   #bolter or boltpistol
   spaceMarine = node("spaceMarine")
-
+  spaceMarine.changes = [
+    ("setSkills", ["athletics", "awareness", "dodge", "navigate (surface)", "operate (surface)", "parry"], 1),
+    ("addListSkills", [("linguistics", "low gothic"), ("forbidden lore", "the horus heresy and long war"), ("forbidden lore", "adeptus astartes"), ("common lore", "war")]),
+    ("addTalents", ["ambidextrous", "bulging biceps", "legion weapon training", "heightened senses (hearing)", "heightened senses (sight)", "nerves of steel", "quick draw", "resistance (cold)", "resistance (heat)", "resistance (poisons)", "unarmed warrior"]),
+    ("addTraits", ["amphibious", "unnatural strength (+4)", "unnatural toughness (+4)"]),
+    ("addGear", ["legion power armor", "legion combat knife"]),
+    ("addXp", 500),
+    ("addAbilities", ["secondary heart", "ossmodula", "biscopea", "haemastamen", "larraman's organ", "catalepsean node", "preomnor", "omophagea", "multi-lung", "occulobe", "lyman's ear", "sus-an membran", "melanchromic organ", "oolitic kidney", "neuroglottis", "mucranoid", "betcher's gland", "progenoids", "black carapace"]),
+    ("rollChar", 30)
+  ]
   #champion, chosen, forsaken, or sorcerer
   spaceMarine_legionBolter = node("spaceMarine_legionBolter")
   spaceMarine_legionBoltPistol = node("spaceMarine_legionBoltPistol")
@@ -1243,13 +1256,15 @@ def initializeTest():
   
   return start
 
-def randRecursiveWalk(start):
+def randRecursiveWalk(start, sheet):
+  sheet.applyChanges(start.changes)
   print(start.name)
   length = len(start.next)
   if(length > 0):
     choice = randint(0, length-1)
     start.next[choice].last = start
-    randRecursiveWalk(start.next[choice])
+    randRecursiveWalk(start.next[choice], sheet)
 
 start = initializeTest2()
-randRecursiveWalk(start)
+sheet = sheet()
+randRecursiveWalk(start, sheet)
