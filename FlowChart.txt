@@ -1,0 +1,443 @@
+Dark Crusade Flow Chart
+
+Notes
+  Things requiring "any one/two/three"
+    Scholastic Lore
+    Common Lore
+    Forbidden Lore
+    trade
+    Operate
+    
+    Hatred
+    Peer
+    Heavy weapon training
+    
+    Characteristics (with mod)
+    
+    Cybernetics (good craftsmaship)
+    Force weapon
+  
+Overview:
+  Race
+  
+    Class
+  
+    Roll Characteristics
+  
+  Pride
+  
+  Motivation
+  
+  Disgrace
+  
+  Spend XP
+  
+  Acquire Equipment
+  
+  
+Race:
+Space Marine
+  Skills: Atheltics, Awareness, Common Lore (War), Dodge, Forbidden Lore (Adeptus Astartes, The Horus Heresy, and the Long War), Linguistics (Low Gothic), Navigate (surface), Operate (Surface), Parry
+  Talents: Ambidextrous, Bulging Biceps, Legion Weapon Training, Heightened Senses (Hearing, Sight), Nerves of Steel, Quick Draw, Resistance (Cold, Heat, Poisons), Unarmed Warrior
+  Traits: Amphibious, Unnatural Strength (+4), Unnatural Toughness (+4)
+  Equipment: Legionnaire Power Armour, Legionnaire Combat Knife
+  xp: 500
+  Abilities: Secondary Heart, Ossmodula, Biscopea, Haemastamen, Larraman's Organ, Catalepsean Node, Preomnor, Omophagea, Multi-lung, Occulobe, Lyman's Ear, Sus-an Membrane, Melanchromic Organ, Oolitic Kidney, Neuroglottis, Mucranoid, Betcher's Gland, Progenoids, Black Carapace
+  Choices:
+  
+  Legionnaire Bolter + 4 mags
+  Legionnaire Bolt Pistol + 4 mags
+  
+  Roll Characteristics starting at 30
+  
+  Champion
+    Skills: Command
+    Talents: Iron Discipline
+    Equipment: Legionnair Power Sword
+    Abilities: Inspiring Presence
+    Choices:
+    
+    Scholastic Lore (any one)
+    
+    Charm
+    Decieve
+    
+    Intimidate
+    Scrutiny
+    
+    Air of Authority
+    Disturbing Voice
+    
+    Lesser Minion of Chaos
+    Sure Strike
+    
+    Roll Wounds 15+1d5
+  Chosen
+    Skills: Intimidate, Stealth
+    Talents: Lightning Reflexes
+    Equipment: Legion Bolt Pistol, Legion Chainsword, 2 clips for Legion Bolt Pistol
+    Abilities: Cold Killer
+    Choices:
+    
+    Dodge (+10)
+    Parry (+10)
+    
+    Quick Draw
+    Rapid Reload
+    
+    Disarm
+    Double Team
+    
+    Sure Strike
+    Deadeye Shot
+    
+    Roll Wounds 16+1d5
+  Forsaken
+    Skills: Acrobatics, Survival
+    Talents: Jaded
+    Equipment: Legion Chainsword, Four Legion Frag Genades, Legion Shotgun with 2 clips
+    Abilities: Resourceful
+    Choices:
+    
+    Commerce
+    Security
+    
+    Common Lore (any one)
+    Survival +10
+    
+    Hatred (pick one)
+    
+    Light Sleeper
+    Blind Fighting
+    
+    Cold Hearted
+    Sound Constitution
+    
+    Roll wounds 15+1d5
+  Sorcerer
+    Skills: Psyniscience, Scholastic Lore (Occult)
+    Talents: Psy Rating (x2)
+    Traits: Psyker
+    Equipment: Legion Bolt Pistol]
+    Abilities: Sorcerer
+    Choices:
+    
+    Deception
+    Scrutiny
+    
+    Forbidden Lore (Daemons)
+    Forbidden Lore (Psykers)
+    
+    500xp of psychic powers from Unaligned, Divination, Telepathy, Telekinesis
+    
+    Meditiation
+    Mimic
+    
+    Force Weapon (of some kind *** )
+    
+    Roll Wounds 15+1d5
+  
+  AFTER EVERYTHING ELSE
+  Spend 500 xp
+Human
+  Skills: Linguistics (Low Gothic)
+  Traits: The Quick and the Dead
+  xp: 1000
+  Choices:
+  
+  Common Lore (any two)
+  
+  Trade (any one)
+  
+  Roll Characteristics starting at 25
+  
+  Apostate
+    Characteristics: +5 Fellowship
+    Skills: Awareness, Charm, Command, Deceive, Inquiry
+    Talents: Air of Authority, Total Recall, Enshakeable Will, Weapon Training (Las, Primary)
+    Equipment: Good-Craftsmanship Laspistol, Chaos symbol pendent, unholy tomes, 2 laspistol clips
+    Abilities: Serpent's Tongue
+    Choices:
+    
+    Scholastic Lore (any 3)
+    
+    Forbidden Lore (any 3)
+    
+    Dodge
+    Parry
+    
+    Intimidate
+    Commerce
+    
+    Charm +10
+    Deceive +10
+    
+    Command +10
+    Inquiry +10
+    
+    Security
+    Stealth
+    Logic
+    
+    Hatred (any one)
+    
+    Peer (any one)
+    
+    Disturbing Voice
+    Radiant Presence
+    
+    Polyglot
+    Mimic
+    
+    Inspire Wrath
+    Iron Discipline
+    Lesser Minion of Chaos
+    
+    Best-Craftsmanship Sword
+    Common-Craftsmanship Power Blade
+    
+    Flak Armour
+    Mesh Armour
+    
+    Roll Wounds 9+1d5
+  Heretek
+    Characteristics: +5 Intelligence
+    Skills: Logic, Common Lore (Adeptus Mechanicus, Tech), Tech Use
+    Talents: Die Hard, Technical Knock, Weapon Training (Las, Primary, Shock), Enemy (Adeptus Mechanicus)
+    Equipment: Best-Craftsmanship Lascarbine, Light Carapace Armour, unholy unguents, combi-tool, dataslate
+    Abilities: Traitor to Mars
+    Choices:
+    
+    Dodge
+    Parry
+    
+    Security
+    Tech Use +10
+    
+    Forbidden Lore (Archeotech)
+    Forbidden Lore (Xenos)
+    Forbidden Lore (Warp)
+    
+    Scholastic Lore (Astromancy)
+    Scholastic Lore (Chymistry)
+    
+    Mechanicus Implants
+    
+    Weapon Training (Bolt)
+    Weapon Training (Plasma)
+    Weapon Training (Power)
+    
+    Mechadendrite Training (Weapon)
+    Mechadendrite Training (Utility)
+    
+    Meditation
+    Total Recall
+    
+    Armour-Monger
+    Weapon-Tech
+    
+    Less Minion of Chaos (servitor or servo-skull)
+    Cold Hearted
+    
+    Common-Craftsmanship Power Axe
+    Good-Craftsmanship Great Weapon (greataxe)
+    
+    any two Good Craftsmanship cybernetics
+    
+    Optical Mechadendrite
+    Utility Mechadendrite
+    Ballistic Mechadendrite with laspistol
+    
+    Lumenin Capacitors
+    Maglev Coils
+    Ferric Lure Implants
+    
+    Roll Wounds 12+1d5
+  Renegade
+    Characteristics: +3 Weapon Skill, +3 Ballistic Skill
+    Skills: Athletics, Awareness, Dodge, Parry, Scholastic Lore (tactica Imperialis), Common Lore (war)
+    Talents: Jaded, Quik Draw, Rapid Reload, Weapon Training (Chain, Las, Primary, SP)
+    Equipment: Carapace Armour, medikit, dataslate with annoted version of Tactica Imperialis
+    Abilities: Adroit
+    Choices:
+    
+    Operate (any one)
+    
+    Command
+    Intimidate
+    
+    Dodge +10
+    Parry +10
+    
+    Survival
+    Stealth
+    
+    Tech Use
+    Medicae
+    
+    Heavy Weapon Training (any one)
+    
+    Weapon Training (Bolt)
+    Weapon Training (Shock)
+    
+    Catfall
+    Combat Senses
+    
+    Sure Strike
+    Deadeye Shot
+    Marksman
+    
+    Double Team
+    Disarm
+    Takedown
+    
+    Ambidextrous
+    Hip Shooting
+    
+    Best-Craftsmanship Lasgun
+    Good-Craftsmanship Boltgun
+    Common-Craftsmanship Plasma Gun
+    Common-Craftsmanship Flamer
+    
+    Best-Craftsmanship laspistol
+    Common-Craftsmanship Bolt pistol
+    
+    Best-Craftsmanship chainsword
+    Common-Craftsmanship Power Mace
+    
+    Roll Wounds 10+1d5
+  Psyker
+    Characteristics: +5 Willpower
+    Skills: Awareness, Psyniscience, Forbidden Lore (Psykers)
+    Talents: Psy Rating 3, Jaded, Weapon Training (Primary)
+    Traits: Psyker
+    Equipment: Flak Cloak, Psy-focus, dataslate filled with arcane lore
+    Abilities: Chaos Psyker
+    Choices:
+    
+    Deceive
+    Intimidate
+    
+    Dodge
+    Parry
+    
+    500xp of psychic powers from unaligned, divination, telepathy, or telekinesis
+    
+    Weapon training (Las)
+    Weapon Training (SP)
+    Weapon Training (Shock)
+    
+    Warp Sense
+    Child of the Warp
+    
+    Common Craftsmanship Laspistol
+    Common Craftsmanship Stub Revolver
+    
+    Good-Craftsmanship Sword
+    Common-Craftsmanship Neural Whip
+    
+    Roll Wounds 8+1d5
+  
+  AFTER EVERYTHING ELSE
+  Spend 1000 xp
+    
+Pride:
+Beauty
+  +2 infamy, -4 Willpower
+Charm
+  +5 fellowship, -5 toughness
+Craftsmanship
+  +1 infamy, +3 agility, +3 intelligence, -3 weapon skill, -3 ballistic skill
+Devotion
+  +5 willpower, -5 strength
+Fortitude
+  +5 toughness, -3 agility, -3 intelligence
+Foresight
+  +5 perception, -5 fellowship
+Logic
+  +5 intelligence, -5 perception
+Martial Prowess
+  +5 weapon skill, -5 intelligence
+Grace
+  +5 agility, -5 ballistic skill
+Wealth
+  Extra acquisition with +20 prior to play
+  
+  -3 willpower
+  
+Disgraces:
+Betrayal
+  +5 corruption
+  
+  -10 to all charm attempts
+Deceit
+  +2 infamy, -4 perception
+Dread
+  +5 perception, -5 willpower
+Destruction
+  +2 infamy, -4 fellowship
+gluttony
+  +2 wounds
+  
+  -5 agility
+Greed
+  +4 corruption
+  
+  -10 to all commerce attempts
+Hubris
+  +2 infamy, -4 intelligence
+regret
+  +5 corruption
+  
+  +10 to all intimidate attempts against character
+Waste
+  +2 infmay, -4 willpower
+Wrath
+  +5 perception, -2 willpower
+  
+  -1 wound
+  
+Motivations:
+Arcane
+  +4 corruption
+  
+  +2 intelligence, -3 strength
+Ascendancy
+  -2 wounds
+  
+  +5 willpower
+Dominion
+  +1 infamy, +2 willpower, +2 fellowship, -4 agility
+  
+  -1 wound
+Immortality
+  +2 wounds
+  
+  -5 weapon skill
+Innovation
+  +2 corruption
+  
+  +3 intelligence
+  
+  -2 wounds
+Legacy
+  +2 infamy
+  
+  -4 intelligence
+Nihilism
+  +5 corruption
+  
+  -3 willpower
+Perfection
+  +5 any characteristic, -3 any 2 characteristics
+Vengeance
+  +2 wounds
+  
+  -5 perception
+Violence
+  +5 corruption
+  
+  -3 intelligence
+  
+AFTER OTHER STEPS
+Acquire Equipment
