@@ -13,14 +13,10 @@ class node():
     self.name = ""
     self.changes = []
     self.next = []
-    self.last = None
-    self.sheet = None
   def __init__(self, name):
     self.name = name
     self.changes = []
     self.next = []
-    self.last = None
-    self.sheet = None
   #need to add check for duplicates
   def insertSelect(options, string):
     for entry in options:
@@ -28,11 +24,8 @@ class node():
       for nextNode in next:
         node.next.append(nextNode)
       self.next.append(node)
-  def addLinearChoiceLayer(self, choices = [], *args):
+  def addLinearChoiceLayer(self, *choices):
     if len(self.next) == 0:
-      for choice in choices:
-        if choice == self:
-          return
       for choice in choices:
         self.next.append(choice)
     else:
@@ -136,85 +129,18 @@ def initializeTest2():
 
   #bolter or boltpistol
   spaceMarine = node("spaceMarine")
+  spaceMarine.changes = [
+    ("skills", 99
+  ]
 
   #champion, chosen, forsaken, or sorcerer
   spaceMarine_legionBolter = node("spaceMarine_legionBolter")
   spaceMarine_legionBoltPistol = node("spaceMarine_legionBoltPistol")
   spaceMarine.addLinearChoiceLayer([spaceMarine_legionBolter, spaceMarine_legionBoltPistol])
 
-  #charm or deceive
+  #choose scholastic lore
   champion = node("champion")
-  #intimidate or scrutiny
-  champion_charm = node("champion_charm")
-  champion_deceive = node("champion_deceive")
-  champion.addLinearChoiceLayer([champion_charm, champion_deceive])
-  #airOfAuthority or disturbingVoice
-  champion_intimidate = node("champion_intimidate")
-  champion_scrutiny = node("champion_scrutiny")
-  champion.addLinearChoiceLayer([champion_intimidate, champion_scrutiny])
-  #lesserMinion or sureStrike
-  champion_airOfAuthority = node("champion_airOfAuthority")
-  champion_disturbingVoice = node("champion_disturbingVoice")
-  champion.addLinearChoiceLayer([champion_airOfAuthority, champion_disturbingVoice])
-  #prides
-  champion_lesserMinion = node("champion_lesserMinion")
-  champion_sureStrike = node("champion_sureStrike")
-  champion.addLinearChoiceLayer([champion_lesserMinion, champion_sureStrike])
-
-  #dodge10 or parry10
-  chosen = node("chosen")
-  #quickDraw or rapidReload
-  chosen_dodge10 = node("chosen_dodge10")
-  chosen_parry10 = node("chosen_parry10")
-  chosen.addLinearChoiceLayer([chosen_dodge10, chosen_parry10])
-  #disarm or doubleTeam
-  chosen_quickDraw = node("chosen_quickDraw")
-  chosen_rapidReload = node("chosen_rapidReload")
-  chosen.addLinearChoiceLayer([chosen_quickDraw, chosen_rapidReload])
-  #sureStrike or deadeyeShot
-  chosen_disarm = node("chosen_disarm")
-  chosen_doubleTeam = node("chosen_doubleTeam")
-  chosen.addLinearChoiceLayer([chosen_disarm, chosen_doubleTeam])
-  #prides
-  chosen_sureStrike = node("chosen_sureStrike")
-  chosen_deadeyeShot = node("chosen_deadeyeShot")
-  chosen.addLinearChoiceLayer([chosen_sureStrike, chosen_deadeyeShot])
-
-  #commerce or scrutiny
-  forsaken = node("forsaken")
-  #commonLore or survival10
-  forsaken_commerce = node("forsaken_commerce")
-  forsaken_scrutiny = node("forsaken_scrutiny")
-  forsaken.addLinearChoiceLayer([forsaken_commerce, forsaken_scrutiny])
-  #lightSleeper or blindFighting
-  forsaken_commonLore = node("forsaken_commonLore")
-  forsaken_survival10 = node("forsaken_survival10")
-  forsaken.addLinearChoiceLayer([forsaken_commonLore, forsaken_survival10])
-  #coldHearted or soundConstitution
-  forsaken_lightSleeper = node("forsaken_lightSleeper")
-  forsaken_blindFighting = node("forsaken_blindFighting")
-  forsaken.addLinearChoiceLayer([forsaken_lightSleeper, forsaken_blindFighting])
-  #prides
-  forsaken_coldHearted = node("forsaken_coldHearted")
-  forsaken_soundConstitution = node("forsaken_soundConstitution")
-  forsaken.addLinearChoiceLayer([forsaken_coldHearted, forsaken_soundConstitution])
-
-  #deception or scrutiny
-  sorcerer = node("sorcerer")
-  #forbiddenLoreDaemons or forbiddenLorePsykers
-  sorcerer_deception = node("sorcerer_deception")
-  sorcerer_scrutiny = node("sorcerer_scrutiny")
-  sorcerer.addLinearChoiceLayer([sorcerer_deception, sorcerer_scrutiny])
-  #meditation or mimic
-  sorcerer_forbiddenLoreDaemons = node("sorcerer_forbiddenLoreDaemons")
-  sorcerer_forbiddenLorePsykers = node("sorcerer_forbiddenLorePsykers")
-  sorcerer.addLinearChoiceLayer([sorcerer_forbiddenLoreDaemons, sorcerer_forbiddenLorePsykers])
-  #prides
-  sorcerer_meditation = node("sorcerer_meditation")
-  sorcerer_mimic = node("sorcerer_mimic")
-  sorcerer.addLinearChoiceLayer([sorcerer_meditation, sorcerer_mimic])
-
-  spaceMarine.addLinearChoiceLayer([champion, chosen, forsaken, sorcerer])
+  
 
   human = node("human")
   start.next.extend([spaceMarine, human])
@@ -1248,7 +1174,6 @@ def randRecursiveWalk(start):
   length = len(start.next)
   if(length > 0):
     choice = randint(0, length-1)
-    start.next[choice].last = start
     randRecursiveWalk(start.next[choice])
 
 start = initializeTest2()
