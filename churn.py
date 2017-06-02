@@ -131,8 +131,95 @@ class sheet():
     self.currentAlignment = "unaligned"
   def applyChanges(self, changes = [], *args):
     for change in changes:
-      print("apply change: " + str(change))
-  #actions: setSkills, addListSkills, addTalents, addTraits, addAbilities, addXp, addGear, rollChar
+      command = change[0]
+      print("handling " + command)
+
+
+      if command == "setSkills":
+        skills = change[1]
+        level = change[2]
+        for skill in skills:
+          if not skill in self.skills:
+            print("ERROR: " + skill + " is not a skill, maybe a typo?")
+            return 0
+          self.skills[skill] = level
+
+      elif command == "addListSkills":
+        skillsAndAdditions = change[1]
+        for skill, addition in skillsAndAdditions:
+          if not skill in self.listSkills:
+            print("ERROR: " + skill + " is not a listSkill, maybe a typo?")
+            return 0
+          if not addition in listSkills[skill]:
+            print("ERROR: " + addition + " is not a " + skill + ", maybe a typo?")
+            return 0
+          self.listSkills[skill][1].append(addition)
+
+      elif command == "addTalents":
+        talents = change[1]
+        for talent in talents:
+          #check for existance of talent
+          self.talents.append(talent)
+
+      elif command == "addAbilities":
+        abilities = change[1]
+        for ability in abilities:
+          #check for existance of ability (?)
+          self.abilities.append(ability)
+
+      elif command == "addXp":
+        xp = change[1]
+        self.xpTotal = self.xpTotal + xp
+
+      elif command == "addGear":
+        gear = change[1]
+        for piece in gear:
+          #check for existance of piece
+          self.gear.append(piece)
+
+      elif command == "rollChar":
+        start = change[1]
+        print("rolling characteristics starting from " + str(start))
+        print("Using 1d5 for infamy and 2d10 for all else")
+        rolls = [randint(1,5)]
+        for i in range(0, 10):
+          rolls.append(randint(1,10) + randint(1,10))
+        rollsString = str(rolls[0]) + "(inf), "
+        for i in range(1, 11):
+          rollsString = rollsString + str(rolls[i]) + ", "
+
+        while(True):
+          answer = raw_input("would you like to assign manually? (y/n)\n")
+          if answer == "y":
+            print("here are some rolls you could use")
+            print(rollsString)
+            ws = int(raw_input("Weapon Skill: " + str(start) + " + "))
+            bs = int(raw_input("Ballistic Skill: " + str(start) + " + "))
+            s = int(raw_input("Strength: " + str(start) + " + "))
+            t = int(raw_input("Toughness: " + str(start) + " + "))
+            ag = int(raw_input("Agility: " + str(start) + " + "))
+            intel = int(raw_input("Intelligence: " + str(start) + " + "))
+            per = int(raw_input("Perception: " + str(start) + " + "))
+            wp = int(raw_input("Willpower: " + str(start) + " + "))
+            fel = int(raw_input("Fellowship: " + str(start) + " + "))
+            inf = int(raw_input("Infamy: 19 + "))
+            self.characteristics["ws"] = start + ws
+            self.characteristics["bs"] = start + bs
+            self.characteristics["s"] = start + s
+            self.characteristics["t"] = start + t
+            self.characteristics["ag"] = start + ag
+            self.characteristics["int"] = start + intel
+            self.characteristics["per"] = start + per
+            self.characteristics["wp"] = start + wp
+            self.characteristics["fel"] = start + fel
+            self.characteristics["inf"] = start + inf
+            break
+          if answer == "n":
+            
+            break
+          else:
+            print("please answer with 'y' or 'n'")
+
 
 def initializeTest2():
   #human or spacemarine
