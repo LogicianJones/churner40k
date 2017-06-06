@@ -1,33 +1,27 @@
 from random import randint #for randRecursiveWalk
 
-listskills = {
+listSkills = {
   "common lore":["adeptus arbites", "adeptus astra telepathica", "adeptus mechanicus", "administratum", "ecclesiarchy", "imperial creed", "imperial guard", "imperial navy", "imperium", "jericho reach", "koronus expanse", "screaming vortex", "tech", "war"],
-  "forbidden lore":["adeptus mechanicus", "adeptus astartes", "codex astartes", "archeotech", "daemonology", "heresy", "the horus heresy and long war", "the inquisition", "mutants", "navigators", "pirates", "psykers", "the warp", "xenos"],
+  "forbidden lore":["adeptus mechanicus", "adeptus astartes", "codex astartes", "archeotech", "daemons", "heresy", "the horus heresy and long war", "the inquisition", "mutants", "navigators", "pirates", "psykers", "the warp", "xenos"],
   "linguistics":["high gothic", "low gothic"],
-  "scholastic lore":["astromancy", "beasts", "bureaucracy", "chymistry", "cryptology", "heraldry", "imperial warrants", "imperial creed", "judgement", "legend", "navis nobilite", "numerology", "occulty", "philosophy", "tactica imperialis"],
+  "scholastic lore":["astromancy", "beasts", "bureaucracy", "chymistry", "cryptology", "heraldry", "imperial warrants", "imperial creed", "judgement", "legend", "navis nobilite", "numerology", "occult", "philosophy", "tactica imperialis"],
   "trade":["archaeologist", "armourer", "astrographer", "chymist", "cryptographer", "explorator", "linguist", "remembrancer", "scrimshawer"],
 }
 
-class node():
-  def __init__(self):
-    self.name = ""
-    self.changes = []
-    self.next = []
-    self.last = None
-    self.sheet = None
-  def __init__(self, name):
+listTalents = {
+  "hatred":["yourself"]
+}
+
+class Node():
+  def __init__(self, name, changes = None):
     self.name = name
-    self.changes = []
+    if changes == None:
+      self.changes = []
+    else:
+      self.changes = changes
     self.next = []
     self.last = None
     self.sheet = None
-  #need to add check for duplicates
-  def insertSelect(options, string):
-    for entry in options:
-      node = node(string + entry)
-      for nextNode in next:
-        node.next.append(nextNode)
-      self.next.append(node)
   def addLinearChoiceLayer(self, choices = [], *args):
     if len(self.next) == 0:
       for choice in choices:
@@ -37,8 +31,8 @@ class node():
         self.next.append(choice)
     else:
       for nextNode in self.next:
-        nextNode.addLinearChoiceLayer(choices)
-
+        nextNode.addLinearChoiceLayer(choices)    
+        
 class sheet():
   def __init__(self):
 
@@ -67,13 +61,13 @@ class sheet():
 
     self.skills = {
       "acrobatics":("ag", 0),
-      "atheltics":("s", 0),
+      "athletics":("s", 0),
       "awareness":("per", 0),
       "charm":("fel", 0),
       "command":("fel", 0),
       "commerce":("int", 0),
       #commonlore, int, list skill
-      "deceive":("fel", 0),
+      "deception":("fel", 0),
       "dodge":("ag", 0),
       #forbiddenlore, int, list skill
       "inquiry":("fel", 0),
@@ -81,9 +75,9 @@ class sheet():
       #linguistics, int, list skill
       "logic":("int", 0),
       "medicae":("int", 0),
-      "navigation (surface)":("int", 0),
-      "navigation (stellar)":("int", 0),
-      "navigation (warp)":("int", 0),
+      "navigate (surface)":("int", 0),
+      "navigate (stellar)":("int", 0),
+      "navigate (warp)":("int", 0),
       "operate (aeronautica)":("ag", 0),
       "operate (surface)":("ag", 0),
       "operate (voidship)":("ag", 0),
@@ -95,7 +89,7 @@ class sheet():
       "sleight of hand":("ag", 0),
       "stealth":("ag", 0),
       "tech-use":("int", 0),
-      "tracking":("int", 0),
+      "survival":("int", 0),
       #trade, int, list skill
     }
 
@@ -132,15 +126,17 @@ class sheet():
   def applyChanges(self, changes = [], *args):
     for change in changes:
       command = change[0]
-      print("handling " + command)
-
-
+      print("handling " + command + " with " + str(change))
+      
       if command == "setSkills":
         skills = change[1]
         level = change[2]
         for skill in skills:
           if not skill in self.skills:
             print("ERROR: " + skill + " is not a skill, maybe a typo?")
+            return -1
+          if self.skills[skill] == level:
+            print("redundancy, dropping path")
             return 0
           self.skills[skill] = level
 
@@ -149,9 +145,13 @@ class sheet():
         for skill, addition in skillsAndAdditions:
           if not skill in self.listSkills:
             print("ERROR: " + skill + " is not a listSkill, maybe a typo?")
-            return 0
+            return -1
           if not addition in listSkills[skill]:
             print("ERROR: " + addition + " is not a " + skill + ", maybe a typo?")
+            return -1
+          #check for redundancy
+          if addition in self.listSkills[skill]:
+            print("redundancy, dropping path")
             return 0
           self.listSkills[skill][1].append(addition)
 
@@ -159,12 +159,19 @@ class sheet():
         talents = change[1]
         for talent in talents:
           #check for existance of talent
+          #check for redundancy
+          if talents in self.talents:
+            print("redundancy, dropping path")
+            return 0
           self.talents.append(talent)
 
       elif command == "addAbilities":
         abilities = change[1]
         for ability in abilities:
           #check for existance of ability (?)
+          if ability in self.abilities:
+            print("redundancy, dropping path")
+            return 0
           self.abilities.append(ability)
 
       elif command == "addXp":
@@ -175,8 +182,40 @@ class sheet():
         gear = change[1]
         for piece in gear:
           #check for existance of piece
+          #check for redundancy
+          if piece in self.gear:
+            print("redundancy, dropping path")
+            return 0
           self.gear.append(piece)
-
+          
+      elif command == "setArchetype":
+        archetype = change[1]
+        self.archetype = archetype
+          
+      elif command == "rollWounds":
+        base = change[1]
+        amount = change[2]
+        dice = change[3]
+        print("rolling wounds (" + str(base) + "+" + str(amount) + "d" + str(dice))
+        while(True):
+          answer = input("would you like to roll manually? (y/n)\n")
+          if answer == "y":
+            roll = input("Wounds: ")
+            self.wounds = roll
+            break
+          if answer == "n":
+            roll = base
+            for i in range(1, amount):
+              roll = roll + randint(1, dice)
+            break
+          else:
+            print("please answer with 'y' or 'n'")
+          
+      elif command == "addChar":
+        char = change[1]
+        amount = change[2]
+        self.characteristics[char] = self.characteristics[char] + amount
+          
       elif command == "rollChar":
         start = change[1]
         print("rolling characteristics starting from " + str(start))
@@ -189,20 +228,20 @@ class sheet():
           rollsString = rollsString + str(rolls[i]) + ", "
 
         while(True):
-          answer = raw_input("would you like to assign manually? (y/n)\n")
+          answer = input("would you like to assign manually? (y/n)\n")
           if answer == "y":
             print("here are some rolls you could use")
             print(rollsString)
-            ws = int(raw_input("Weapon Skill: " + str(start) + " + "))
-            bs = int(raw_input("Ballistic Skill: " + str(start) + " + "))
-            s = int(raw_input("Strength: " + str(start) + " + "))
-            t = int(raw_input("Toughness: " + str(start) + " + "))
-            ag = int(raw_input("Agility: " + str(start) + " + "))
-            intel = int(raw_input("Intelligence: " + str(start) + " + "))
-            per = int(raw_input("Perception: " + str(start) + " + "))
-            wp = int(raw_input("Willpower: " + str(start) + " + "))
-            fel = int(raw_input("Fellowship: " + str(start) + " + "))
-            inf = int(raw_input("Infamy: 19 + "))
+            ws = int(input("Weapon Skill: " + str(start) + " + "))
+            bs = int(input("Ballistic Skill: " + str(start) + " + "))
+            s = int(input("Strength: " + str(start) + " + "))
+            t = int(input("Toughness: " + str(start) + " + "))
+            ag = int(input("Agility: " + str(start) + " + "))
+            intel = int(input("Intelligence: " + str(start) + " + "))
+            per = int(input("Perception: " + str(start) + " + "))
+            wp = int(input("Willpower: " + str(start) + " + "))
+            fel = int(input("Fellowship: " + str(start) + " + "))
+            inf = int(input("Infamy: 19 + "))
             self.characteristics["ws"] = start + ws
             self.characteristics["bs"] = start + bs
             self.characteristics["s"] = start + s
@@ -215,18 +254,67 @@ class sheet():
             self.characteristics["inf"] = start + inf
             break
           if answer == "n":
-            
+            self.characteristics["inf"] = rolls.pop(0)
+            rolls.remove(min(rolls))
+            self.characteristics["ws"] = start + rolls.pop(0)
+            self.characteristics["bs"] = start + rolls.pop(0)
+            self.characteristics["s"] = start + rolls.pop(0)
+            self.characteristics["t"] = start + rolls.pop(0)
+            self.characteristics["ag"] = start + rolls.pop(0)
+            self.characteristics["int"] = start + rolls.pop(0)
+            self.characteristics["per"] = start + rolls.pop(0)
+            self.characteristics["wp"] = start + rolls.pop(0)
+            self.characteristics["fel"] = start + rolls.pop(0)
             break
           else:
             print("please answer with 'y' or 'n'")
+    return 1
+    
+def makePickNodes(category, subtype, stringFormat):
+    returnList = []
+    if category == "listSkills":
+      if not subtype in listSkills:
+        print("can't find " + subtype + " in listSkills for makePickNodes, maybe typo?")
+        return -1
+      set = listSkills[subtype]
+      for option in set:
+        node = Node(stringFormat + option, [("addListSkills", [(subtype, option)])])
+        returnList.append(node)
+    if category == "talents":
+      if not subtype in listTalents:
+        print("can't find " + subtype + " in listTalents for makePickNodes, maybe typo?")
+        return -1
+      set = listTalents[subtype]
+      for option in set:
+        node = Node(stringFormat + option, [("addTalents", [option])])
+        returnList.append(node)
+    return returnList
 
-
+    
+def randRecursiveWalk(start, sheet):
+  if not start.sheet == None:
+    print("node has been visited, not applying change and reverting sheet")
+    sheet = start.sheet
+  else:
+    print(start.name)
+    if sheet.applyChanges(start.changes) == 0:
+      print("redundancy detected, removing option and going back")
+      start.last.next.remove(start)
+      return randRecursiveWalk(start.last, None)
+  length = len(start.next)
+  if(length > 0):
+    start.sheet = sheet
+    choice = randint(0, length-1)
+    start.next[choice].last = start
+    return randRecursiveWalk(start.next[choice], sheet)
+  return sheet
+      
 def initializeTest2():
   #human or spacemarine
-  start = node("start")
-
+  start = Node("start")
+  
   #bolter or boltpistol
-  spaceMarine = node("spaceMarine")
+  spaceMarine = Node("spaceMarine")
   spaceMarine.changes = [
     ("setSkills", ["athletics", "awareness", "dodge", "navigate (surface)", "operate (surface)", "parry"], 1),
     ("addListSkills", [("linguistics", "low gothic"), ("forbidden lore", "the horus heresy and long war"), ("forbidden lore", "adeptus astartes"), ("common lore", "war")]),
@@ -238,102 +326,247 @@ def initializeTest2():
     ("rollChar", 30)
   ]
   #champion, chosen, forsaken, or sorcerer
-  spaceMarine_legionBolter = node("spaceMarine_legionBolter")
-  spaceMarine_legionBoltPistol = node("spaceMarine_legionBoltPistol")
+  spaceMarine_legionBolter = Node("spaceMarine_legionBolter")
+  spaceMarine_legionBolter.changes = [
+    ("addGear", ["legion bolter", "4 legion bolter magazines"])
+  ]
+  spaceMarine_legionBoltPistol = Node("spaceMarine_legionBoltPistol")
+  spaceMarine_legionBoltPistol.changes = [
+    ("addGear", ["legion bolt pistol", "4 legion bolt pistol magazines"])
+  ]
   spaceMarine.addLinearChoiceLayer([spaceMarine_legionBolter, spaceMarine_legionBoltPistol])
 
+  #pick 1 scholastic lore
+  champion = Node("champion")
+  champion.changes = [
+    ("setSkills", ["command"], 1),
+    ("addTalents", ["iron discipline"]),
+    ("addGear", ["legion power sword"]),
+    ("addAbilities", ["inspiring presence"]),
+    ("rollWounds", 15, 1, 5),
+    ("setArchetype", "champion")
+  ]
   #charm or deceive
-  champion = node("champion")
+  champion.addLinearChoiceLayer(makePickNodes("listSkills", "scholastic lore", "champion_"))
   #intimidate or scrutiny
-  champion_charm = node("champion_charm")
-  champion_deceive = node("champion_deceive")
+  champion_charm = Node("champion_charm")
+  champion_charm.changes = [
+    ("setSkills", ["charm"], 1)
+  ]
+  champion_deceive = Node("champion_deceive")
+  champion_deceive.changes = [
+    ("setSkills", ["deception"], 1)
+  ]
   champion.addLinearChoiceLayer([champion_charm, champion_deceive])
   #airOfAuthority or disturbingVoice
-  champion_intimidate = node("champion_intimidate")
-  champion_scrutiny = node("champion_scrutiny")
+  champion_intimidate = Node("champion_intimidate")
+  champion_intimidate.changes = [
+    ("setSkills", ["intimidate"], 1)
+  ]
+  champion_scrutiny = Node("champion_scrutiny")
+  champion_scrutiny.changes = [
+    ("setSkills", ["scrutiny"], 1)
+  ]
   champion.addLinearChoiceLayer([champion_intimidate, champion_scrutiny])
   #lesserMinion or sureStrike
-  champion_airOfAuthority = node("champion_airOfAuthority")
-  champion_disturbingVoice = node("champion_disturbingVoice")
+  champion_airOfAuthority = Node("champion_airOfAuthority", [("addTalents", ["air of authority"])])
+  champion_disturbingVoice = Node("champion_disturbingVoice", [("addTalents", ["disturbing voice"])])
   champion.addLinearChoiceLayer([champion_airOfAuthority, champion_disturbingVoice])
   #prides
-  champion_lesserMinion = node("champion_lesserMinion")
-  champion_sureStrike = node("champion_sureStrike")
+  champion_lesserMinion = Node("champion_lesserMinion", [("addTalents", ["lesser minion"])])
+  champion_sureStrike = Node("champion_sureStrike", [("addTalents", ["sure strike"])])
   champion.addLinearChoiceLayer([champion_lesserMinion, champion_sureStrike])
 
   #dodge10 or parry10
-  chosen = node("chosen")
+  chosen = Node("chosen")
+  chosen.changes = [
+    ("setSkills", ["intimidate", "stealth"], 1),
+    ("addTalents", ["lightning reflexes"]),
+    ("addGear", ["legion bolt pistol", "legion chainsword", "2 legion bolt pistol magazines"]),
+    ("addAbilities", ["cold killer"]),
+    ("rollWounds", 16, 1, 5),
+    ("setArchetype", "chosen")
+  ]
   #quickDraw or rapidReload
-  chosen_dodge10 = node("chosen_dodge10")
-  chosen_parry10 = node("chosen_parry10")
+  chosen_dodge10 = Node("chosen_dodge10", [("setSkills", ["dodge"], 2)])
+  chosen_parry10 = Node("chosen_parry10", [("setSkills", ["parry"], 2)])
   chosen.addLinearChoiceLayer([chosen_dodge10, chosen_parry10])
   #disarm or doubleTeam
-  chosen_quickDraw = node("chosen_quickDraw")
-  chosen_rapidReload = node("chosen_rapidReload")
+  chosen_quickDraw = Node("chosen_quickDraw", [("addTalents", ["quick draw"])])
+  chosen_rapidReload = Node("chosen_rapidReload", [("addTalents", ["rapid reload"])])
   chosen.addLinearChoiceLayer([chosen_quickDraw, chosen_rapidReload])
   #sureStrike or deadeyeShot
-  chosen_disarm = node("chosen_disarm")
-  chosen_doubleTeam = node("chosen_doubleTeam")
+  chosen_disarm = Node("chosen_disarm", [("addTalents", ["disarm"])])
+  chosen_doubleTeam = Node("chosen_doubleTeam", [("addTalents", ["double team"])])
   chosen.addLinearChoiceLayer([chosen_disarm, chosen_doubleTeam])
   #prides
-  chosen_sureStrike = node("chosen_sureStrike")
-  chosen_deadeyeShot = node("chosen_deadeyeShot")
+  chosen_sureStrike = Node("chosen_sureStrike", [("addTalents", ["sure strike"])])
+  chosen_deadeyeShot = Node("chosen_deadeyeShot", [("addTalents", ["deadeye shot"])])
   chosen.addLinearChoiceLayer([chosen_sureStrike, chosen_deadeyeShot])
 
   #commerce or scrutiny
-  forsaken = node("forsaken")
-  #commonLore or survival10
-  forsaken_commerce = node("forsaken_commerce")
-  forsaken_scrutiny = node("forsaken_scrutiny")
+  forsaken = Node("forsaken")
+  forsaken.changes = [
+    ("setSkills", ["acrobatics", "survival"], 1),
+    ("addTalents", ["jaded"]),
+    ("addGear", ["legion chainsword", "4 legion frag grenades", "legion shotgun", "2 legion shotgun magazines"]),
+    ("addAbilities", ["resourceful"]),
+    ("rollWounds", 15, 1, 5),
+    ("setArchetype", "forsaken")
+  ]
+  #pick one common lore or survival10
+  forsaken_commerce = Node("forsaken_commerce", [("setSkills", ["commerce"], 1)])
+  forsaken_scrutiny = Node("forsaken_scrutiny", [("setSkills", ["scrutiny"], 1)])
   forsaken.addLinearChoiceLayer([forsaken_commerce, forsaken_scrutiny])
+  #pick one hatred
+  forsaken_survival10 = Node("forsaken_survival10", [("setSkills", ["survival"], 2)])
+  forsaken_commonLores = makePickNodes("listSkills", "common lore", "forsaken_")
+  forsaken.addLinearChoiceLayer(forsaken_commonLores + [forsaken_survival10])
   #lightSleeper or blindFighting
-  forsaken_commonLore = node("forsaken_commonLore")
-  forsaken_survival10 = node("forsaken_survival10")
-  forsaken.addLinearChoiceLayer([forsaken_commonLore, forsaken_survival10])
+  forsaken.addLinearChoiceLayer(makePickNodes("talents", "hatred", "forsaken_"))
+  
   #coldHearted or soundConstitution
-  forsaken_lightSleeper = node("forsaken_lightSleeper")
-  forsaken_blindFighting = node("forsaken_blindFighting")
+  forsaken_lightSleeper = Node("forsaken_lightSleeper", [("addTalents", ["light sleeper"])])
+  forsaken_blindFighting = Node("forsaken_blindFighting", [("addTalents", ["blind fighting"])])
   forsaken.addLinearChoiceLayer([forsaken_lightSleeper, forsaken_blindFighting])
   #prides
-  forsaken_coldHearted = node("forsaken_coldHearted")
-  forsaken_soundConstitution = node("forsaken_soundConstitution")
+  forsaken_coldHearted = Node("forsaken_coldHearted", [("addTalents", ["cold hearted"])])
+  forsaken_soundConstitution = Node("forsaken_soundConstitution", [("addTalents", ["sound constitution"])])
   forsaken.addLinearChoiceLayer([forsaken_coldHearted, forsaken_soundConstitution])
 
   #deception or scrutiny
-  sorcerer = node("sorcerer")
+  sorcerer = Node("sorcerer")
+  sorcerer.changes = [
+    ("setSkills", ["psyniscience"], 1),
+    ("addListSkills", [("scholastic lore", "occult")]),
+    ("addTalents", ["psy rating (x2)"]),
+    ("addTraits", ["psyker"]),
+    ("addGear", ["legion bolt pistol"]),
+    ("addAbilities", ["sorcerer"]),
+    ("rollWounds", 15, 1, 5),
+    ("setArchetype", "sorcerer")
+  ]
   #forbiddenLoreDaemons or forbiddenLorePsykers
-  sorcerer_deception = node("sorcerer_deception")
-  sorcerer_scrutiny = node("sorcerer_scrutiny")
+  sorcerer_deception = Node("sorcerer_deception", [("setSkills", ["deception"], 1)])
+  sorcerer_scrutiny = Node("sorcerer_scrutiny", [("setSkills", ["scrutiny"], 1)])
   sorcerer.addLinearChoiceLayer([sorcerer_deception, sorcerer_scrutiny])
   #meditation or mimic
-  sorcerer_forbiddenLoreDaemons = node("sorcerer_forbiddenLoreDaemons")
-  sorcerer_forbiddenLorePsykers = node("sorcerer_forbiddenLorePsykers")
+  sorcerer_forbiddenLoreDaemons = Node("sorcerer_forbiddenLoreDaemons", [("addListSkills", [("forbidden lore", "daemons")])])
+  sorcerer_forbiddenLorePsykers = Node("sorcerer_forbiddenLorePsykers", [("addListSkills", [("forbidden lore", "psykers")])])
   sorcerer.addLinearChoiceLayer([sorcerer_forbiddenLoreDaemons, sorcerer_forbiddenLorePsykers])
-  #prides
-  sorcerer_meditation = node("sorcerer_meditation")
-  sorcerer_mimic = node("sorcerer_mimic")
+  #pick force weapon
+  sorcerer_meditation = Node("sorcerer_meditation", [("addTalents", ["meditation"])])
+  sorcerer_mimic = Node("sorcerer_mimic", [("addTalents", ["mimic"])])
   sorcerer.addLinearChoiceLayer([sorcerer_meditation, sorcerer_mimic])
-
+  #prides
+  sorcerer.addLinearChoiceLayer(makePickNodes("gear", "force weapons", "sorcerer_"))
+  
   spaceMarine.addLinearChoiceLayer([champion, chosen, forsaken, sorcerer])
 
-  human = node("human")
+  #choose a common lore
+  human = Node("human")
+  human.changes = [
+    ("addListSkills", [("linguistics", "low gothic")]),
+    ("addTraits", ["the quick and the dead"]),
+    ("addXP", 1000),
+    ("rollChar", 25)
+  ]
+  #choose another common lore
+  human.addLinearChoiceLayer(makePickNodes("listSkills", "common lore", "human_"))
+  #choose 1 trade
+  human.addLinearChoiceLayer(makePickNodes("listSkills", "common lore", "human_"))
+  #apostate, heretek, renegade, psyker
+  human.addLinearChoiceLayer(makePickNodes("listSkills", "trade", "human_"))
+  
+  #choose a scholastic lore
+  apostate = Node("apostate")
+  apostate.changes = [
+    ("addChar", "fel", 5),
+    ("setSkills", ["awareness", "charm", "command", "deceive", "inquiry"], 1),
+    ("addTalents", ["air of authority", "total recall", "unshakeable will", "weapon training (las)", "weapon training (primary)"]),
+    ("addGear", ["good-craftsmanship laspistol", "chaos symbol pendent", "unholy tomes", "2 laspistol magazines"]),
+    ("addAbilities", ["serpent's tongue"]),
+    ("rollWounds", 9, 1, 5),
+    ("setArchetype", "apostate")
+  ]
+  #choose a second scholastic lore
+  apostate.addLinearChoiceLayer(makePickNodes("listSkills", "scholastic lore", "apostate_"))
+  #choose a third scholastic lore
+  apostate.addLinearChoiceLayer(makePickNodes("listSkills", "scholastic lore", "apostate_"))
+  #choose a forbidden lore
+  apostate.addLinearChoiceLayer(makePickNodes("listSkills", "scholastic lore", "apostate_"))
+  #choose a second forbidden lore
+  apostate.addLinearChoiceLayer(makePickNodes("listSkills", "forbidden lore", "apostate_"))
+  #choose a third forbidden lore
+  apostate.addLinearChoiceLayer(makePickNodes("listSkills", "forbidden lore", "apostate_"))
+  #dodge or parry
+  apostate.addLinearChoiceLayer(makePickNodes("listSkills", "forbidden lore", "apostate_"))
+  #intimidate or commerce
+  apostate_dodge = Node("apostate_dodge", [("setSkills", ["dodge"], 1)])
+  apostate_parry = Node("apostate_parry", [("setSkills", ["parry"], 1)])
+  apostate.addLinearChoiceLayer([apostate_dodge, apostate_parry])
+  #charm10 or deceive10
+  apostate_intimidate = Node("apostate_intimidate", [("setSkills", ["intimidate"], 1)])
+  apostate_commerce = Node("apostate_commerce", [("setSkills", ["commerce"], 1)])
+  apostate.addLinearChoiceLayer([apostate_intimidate, apostate_commerce])
+  #command10 or inquiry10
+  apostate_charm10 = Node("apostate_charm10", [("setSkills", ["charm"], 2)])
+  apostate_deceive10 = Node("apostate_deceive10", [("setSkills", ["deception"], 2)])
+  apostate.addLinearChoiceLayer([apostate_charm10, apostate_deceive10])
+  #security, stealth, or logic
+  apostate_command10 = Node("apostate_command10", [("setSkills", ["command"], 2)])
+  apostate_inquiry10 = Node("apostate_inquiry10", [("setSkills", ["inquiry"], 2)])
+  apostate.addLinearChoiceLayer([apostate_command10, apostate_inquiry10])
+  #pick 1 hatred
+  apostate_security = Node("apostate_security", [("setSkills", ["security"], 1)])
+  apostate_stealth = Node("apostate_stealth", [("setSkills", ["stealth"], 1)])
+  apostate_logic = Node("apostate_logic", [("setSkills", ["logic"], 1)])
+  apostate.addLinearChoiceLayer([apostate_security, apostate_stealth, apostate_logic])
+  #pick 1 peer
+  apostate.addLinearChoiceLayer(makePickNodes("talents", "hatred", "apostate_"))
+  #disturbingVoice or radiantPresence
+  apostate.addLienarChoiceLayer(makePickNodes("talents", "peer", "apostate_"))
+  #polyglot or mimic
+  apostate_disturbingVoice = Node("apostate_disturbingVoice", [("addTalents", ["disturbing voice"])])
+  apostate_radiantPresence = Node("apostate_radiantePresence", [("addTalents", ["radiant presence"])])
+  apostate.addLienarChoiceLayer([apostate_disturbingVoice, apostate_radiantPresence])
+  #inspireWrath, iron discipline, or lesserMinion
+  apostate_mimic = Node("apostate_mimic", [("addTalents", ["mimic"])])
+  apostate_polyglot = Node("apostate_polyglot", [("addTalents", ["polyglot"])])
+  apostate.addLinearChoiceLayer([apostate_mimic, apostate_polyglot])
+  #bestCraftSword or commonCraftPowerBlade
+  apostate_inspireWrath = Node("apostate_inspireWrath", [("addTalents", ["insire wrath"])])
+  apostate_ironDiscipline = Node("apostate_ironDiscipline", [("addTalents", ["iron discipline"])])
+  apostate_lesserMinion = Node("apostate_lesserMinion", [("addTalents", ["lesser minion"])])
+  apostate.addLinearChoiceLayer([apostate_inspireWrath, apostate_ironDiscipline, apostate_lesserMinion])
+  #flak armour or mesh armour
+  apostate_bestCraftSword = Node("apostate_bestCraftSword", [("addGear", ["best-craftsmanship sword"])])
+  apostate_commonCraftPowerBlade = Node("apostate_commonCraftPowerBlade", [("addGear", ["common-craftsmanship power blade"])])
+  apostate.addLinearChoiceLayer([apostate_bestCraftSword, apostate_commonCraftPowerBlade])
+  #prides
+  apostate_flackArmor = Node("apostate_flackArmor", [("addGear", ["flack armour"])])
+  apostate_meshArmor = Node("apostate_flackArmor", [("addGear", ["mesh armour"])])
+  apostate.addLinearChoiceLayer([apostate_flackArmor, apostate_meshArmor])
+  
+  
   start.next.extend([spaceMarine, human])
   
   return start
 
+#this doesn't work anymore
 def initializeTest():
   #human or spacemarine
-  start = node("start")
+  start = Node("start")
 
   #bolter of bolt pistol
-  spaceMarine = node("spaceMarine")
+  spaceMarine = Node("spaceMarine")
   
   #champion or chosen or forsaken or sorcerer
-  spaceMarine_legionBolter = node("spaceMarine_legionBolter")
-  spaceMarine_legionBoltPistol = node("spaceMarine_legionBoltPistol")
+  spaceMarine_legionBolter = Node("spaceMarine_legionBolter")
+  spaceMarine_legionBoltPistol = Node("spaceMarine_legionBoltPistol")
 
   #charm or deceive
-  champion = node("champion")
+  champion = Node("champion")
 
   #intimidate or scrutiny  
   champion_charm = node("champion_charm")
@@ -1343,15 +1576,11 @@ def initializeTest():
   
   return start
 
-def randRecursiveWalk(start, sheet):
-  sheet.applyChanges(start.changes)
-  print(start.name)
-  length = len(start.next)
-  if(length > 0):
-    choice = randint(0, length-1)
-    start.next[choice].last = start
-    randRecursiveWalk(start.next[choice], sheet)
-
 start = initializeTest2()
 sheet = sheet()
-randRecursiveWalk(start, sheet)
+sheet = randRecursiveWalk(start, sheet)
+print()
+print()
+print("here is your character")
+for attribute in dir(sheet):
+  print(attribute + ": " + str(getattr(sheet, attribute)))
