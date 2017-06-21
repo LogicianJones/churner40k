@@ -9,8 +9,11 @@ listSkills = {
 }
 
 listTalents = {
-  "hatred":["yourself"]
+  "hatred":["yourself"],
+  "peer":["yourself"]
 }
+
+limit = 70
 
 class Node():
   def __init__(self, name, changes = None):
@@ -22,16 +25,29 @@ class Node():
     self.next = []
     self.last = None
     self.sheet = None
+    self.endList = []
+  
   def addLinearChoiceLayer(self, choices = [], *args):
-    if len(self.next) == 0:
-      for choice in choices:
-        if choice == self:
-          return
-      for choice in choices:
+    for lastNode in self.endList:
+      for choice in choices:      
         self.next.append(choice)
+    self.endList = choices
+  
+  def old_addLinearChoiceLayer(self, choices = [], *args): 
+    global limit
+    if len(self.next) == 0:
+        for choice in choices:
+          if limit > 0:
+            print(choice.name)
+            limit = limit - 1
+          if choice == self:
+            return
+        for choice in choices:
+          self.next.append(choice)
     else:
       for nextNode in self.next:
-        nextNode.addLinearChoiceLayer(choices)    
+        nextNode.addLinearChoiceLayer(choices)
+    
         
 class sheet():
   def __init__(self):
@@ -126,8 +142,6 @@ class sheet():
   def applyChanges(self, changes = [], *args):
     for change in changes:
       command = change[0]
-      print("handling " + command + " with " + str(change))
-      
       if command == "setSkills":
         skills = change[1]
         level = change[2]
@@ -525,11 +539,11 @@ def initializeTest2():
   #pick 1 peer
   apostate.addLinearChoiceLayer(makePickNodes("talents", "hatred", "apostate_"))
   #disturbingVoice or radiantPresence
-  apostate.addLienarChoiceLayer(makePickNodes("talents", "peer", "apostate_"))
+  apostate.addLinearChoiceLayer(("talents", "peer", "apostate_"))
   #polyglot or mimic
   apostate_disturbingVoice = Node("apostate_disturbingVoice", [("addTalents", ["disturbing voice"])])
   apostate_radiantPresence = Node("apostate_radiantePresence", [("addTalents", ["radiant presence"])])
-  apostate.addLienarChoiceLayer([apostate_disturbingVoice, apostate_radiantPresence])
+  apostate.addLinearChoiceLayer([apostate_disturbingVoice, apostate_radiantPresence])
   #inspireWrath, iron discipline, or lesserMinion
   apostate_mimic = Node("apostate_mimic", [("addTalents", ["mimic"])])
   apostate_polyglot = Node("apostate_polyglot", [("addTalents", ["polyglot"])])
@@ -548,6 +562,85 @@ def initializeTest2():
   apostate_meshArmor = Node("apostate_flackArmor", [("addGear", ["mesh armour"])])
   apostate.addLinearChoiceLayer([apostate_flackArmor, apostate_meshArmor])
   
+  #dodge or parry
+  heretek = Node("heretek")
+  heretek.choices = [
+    ("addChar", "int", 5),
+    ("setSkills", ["Logic", "Tech-Use"], 1),
+    ("addListSkills", ["common lore", "adeptus mechanicus"]),
+    ("addTalents", ["die hard", "technical knock", "weapon training (las)", "weapon training (primary)", "weapon training (shock)", "enemy (adeptus mechanicus)"]),
+    ("addTraits", ["mechanicus implants"]),
+    ("addGear", "best-craftsmanship lascarbine", "light carapace armor", "unholy unguents", "combit-tool", "dataslate"),
+    ("addAbilities", "traitor to mars"),
+    ("rollWounds", 12, 1, 5)
+  ]
+  #security or techUse10
+  heretek_dodge = Node("heretek_dodge", ["setSkills", ["dodge"], 1])
+  heretek_parry = Node("heretek_parry", ["setSkills", ["parry"], 1])
+  #forbiddenLoreArcheotech, forbiddenLoreXenos, forbiddenLoreWarp
+  heretek_security = Node("heretek_security", [("setSkills", ["security"], 1)])
+  heretek_techUse10 = Node("heretek_techUse10", [("setSkills", ["techUSe"], 2)])
+  heretek.addLinearChoiceLayer([heretek_security, heretek_techUse10])
+  #scholasticLoreAstromancy or scholasticLoreChymistry
+  heretek_forbiddenLoreArcheotech = Node("heretek_forbiddenLoreArcheotech", ["addListSkills", ["forbidden lore", "archeotech"]])
+  heretek_forbiddenLoreXenos = Node("heretek_forbiddenLoreXenos", ["addListSkills", ["forbidden lore", "xenos"]])
+  heretek_forbiddenLoreWarp = Node("heretek_forbiddenLoreWarp", ["addListSkills", ["forbidden lore", "warp"]])
+  heretek.addLinearChoiceLayer([heretek_forbiddenLoreArcheotech, heretek_forbiddenLoreWarp, heretek_forbiddenLoreXenos])
+  #weaponTrainingBolt, weaponTrainingPlasma, weaponTrainingPower
+  heretek_scholasticLoreAstromancy = Node("heretek_scholasticLoreAstromancy", ["addListSkills", ["scholastic lore", "astromancy"]])
+  heretek_scholasticLoreChymistry = Node("heretek_scholasticLoreChymistry", ["addListSkills", ["scholastic lore", "chymistry"]])
+  #mechadendriteTrainingWeapon or mechadendriteTrainingUtility
+  heretek_weaponTrainingBolt = Node("heretek_weaponTrainingBolt", [("addTalents", "weapon training (bolt")])
+  heretek_weaponTrainingPlasma = Node("heretek_weaponTrainingPlasma", [("addTalents", "weapon training (plasma)")])
+  heretek_weaponTrainingPower = Node("heretek_weaponTrainingPower", [("addTalents", "weapon training (power)")])
+  heretek.addLinearChoiceLayer([heretek_weaponTrainingBolt, heretek_weaponTrainingPlasma, heretek_weaponTrainingPower])
+  #meditation or totalRecall
+  heretek_mechadendriteTrainingWeapon = Node("heretek_mechadendriteTrainingWeapon", [("addTalents", ["mechadendrite training (weapon)"])])
+  heretek_mechadendriteTrainingUtility = Node("heretek_mechadendriteTrainingUtility", [("addTalents", ["mechadendrite training (utility)"])])
+  heretek.addLinearChoiceLayer([heretek_mechadendriteTrainingWeapon, heretek_mechadendriteTrainingUtility])
+  #armorMonger or weaponTech
+  heretek_meditation = Node("heretek_meditation", [("addTalents", ["meditation"])])
+  heretek_totalRecall = Node("heretek_totalRecall", [("addTalents", ["total recall"])])
+  heretek.addLinearChoiceLayer([heretek_meditation, heretek_totalRecall])
+  #lesserMinionHeretek or coldHearted
+  heretek_armorMonger = Node("heretek_armorMonger", [("addTalents", ["armor monger"])])
+  heretek_weaponTech = Node("heretek_weaponTech", [("addTalents", ["weapon-tech"])])
+  heretek.addLinearChoiceLayer([heretek_armorMonger, heretek_weaponTech])
+  #commonCraftPowerAxe or goodCraftGreatWeapon
+  heretek_lesserMinionHeretek = Node("heretek_lesserMinionHeretek", [("addTalents", ["lesser minion (servitor/servor-skull)"])])
+  heretek_coldHearted = Node("heretek_coldHearted", [("addTalents", ["cold hearted"])])
+  heretek.addLinearChoiceLayer([heretek_lesserMinionHeretek, heretek_coldHearted])
+  #choose heretek cybernetic
+  heretek_commonCraftPowerAxe = Node("heretek_commonCraftPowerAxe", [("addGear", ["common-craftsmanship power axe"])])
+  heretek_goodCraftGreatWeapon = Node("heretek_goodCraftGreatWeapon", [("addGear", ["great-craftsmanship great weapon"])])
+  heretek.addLinearChoiceLayer([heretek_commonCraftPowerAxe, heretek_goodCraftGreatWeapon])
+  #choose heretek cybernetic
+  heretek.addLinearChoiceLayer(makePickNodes("gear", "heretekCybernetics", "heretek_"))
+  #opticalMechadendrite, utilityMechadendrite, or ballisticMechadendriteWithLasPistol
+  heretek.addLinearChoiceLayer(makePickNodes("gear", "heretekCybernetics", "heretek_"))
+  #luminenCapacitors, maglevCoils, ferricLureImplants
+  heretek_opticalMechadendrite = Node("heretek_opticalMechadendrite", [("addGear", ["optical mechadendrite"])])
+  heretek_utilityMechadendrite = Node("heretek_utilityMechadendrite", [("addGear", ["utility mechadendrite"])])
+  heretek_ballisticMechadendriteWithLasPistol = Node("heretek_ballisticMechadendriteWithLasPistol", [("addGear", ["ballistic mechadendrite w/ laspistol"])])
+  heretek.addLinearChoiceLayer([heretek_opticalMechadendrite, heretek_utilityMechadendrite, heretek_ballisticMechadendriteWithLasPistol])
+  #prides
+  heretek_luminenCapacitors = Node("heretek_luminenCapacitors", [("addGear", ["luminen capacitors"])])
+  heretek_maglevCoils = Node("heretek_maglevCoils", [("addGear", ["maglev coils"])])
+  heretek_ferricLureImplants = Node("heretek_ferricLureImplants", [("addGear", ["ferric lure implants"])])
+  heretek.addLinearChoiceLayer([heretek_luminenCapacitors, heretek_maglevCoils, heretek_ferricLureImplants])
+  
+  #deceive or intimidate
+  psyker = Node("psyker")
+  psyker.changes = [
+    ("addChar", "wp", 5),
+    ("setSkills", ["awareness", "psyniscience"], 1),
+    ("addListSkills", ["forbidden lore", "psykers"]),
+    ("addTalents", ["psy rating 3", "jaded", "weapon training (primary)"]),
+    ("addTraits", ["psyker"]),
+    ("addGear", ["flak cloak", "psy-focus", "dataslate w/ arcane lore"]),
+    ("addAbilities", ["chaose psyker"]),
+    ("rollWounds", 8, 1, 5)
+  ]
   
   start.next.extend([spaceMarine, human])
   
